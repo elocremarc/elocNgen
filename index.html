@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>WebGPU Cube with Custom Shaders</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100%;
+      }
+      canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="module">
+      import { Eloc, Cube, Sphere, Light } from '/content/elocNgen.js';
+
+      (async () => {
+        const eloc = await Eloc.createMedium();
+        const { scene } = eloc;
+
+        // Create a directional light
+        const light = new Light({
+          direction: [0, 0, 0],
+          color: [1, 1, 1],
+          intensity: 1.0,
+        });
+
+        scene.add(light);
+
+        // Create two spheres
+        const sphere1 = new Sphere(eloc);
+        scene.add(sphere1);
+
+        const sphere2 = new Sphere(eloc);
+        scene.add(sphere2);
+
+        // Animation loop to orbit spheres
+        function animate(time) {
+          const angle = time / 1000;
+
+          // Update sphere1 position
+          sphere1.position = [Math.cos(angle) * 2, 0, Math.sin(angle) * 2];
+
+          // Update sphere2 position
+          sphere2.position = [
+            Math.cos(angle + Math.PI) * 2,
+            0,
+            Math.sin(angle + Math.PI) * 2,
+          ];
+
+          requestAnimationFrame(animate);
+        }
+
+        requestAnimationFrame(animate);
+      })();
+    </script>
+  </body>
+</html>
